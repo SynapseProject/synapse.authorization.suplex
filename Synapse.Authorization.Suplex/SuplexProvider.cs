@@ -16,9 +16,12 @@ public class SuplexProvider : IAuthorizationProvider
 {
     static Dictionary<int, SuplexProvider> _cache = new Dictionary<int, SuplexProvider>();
 
-    public SuplexConnectionInfo Splx { get; set; }
-
-    private SuplexDal Dal { get; set; }
+    public SuplexConnectionInfo SuplexConnection { get; set; }
+    [YamlIgnore]
+    public bool HasSuplexConnection { get { return SuplexConnection != null && SuplexConnection.HasPath; } }
+    private SuplexDal SplxDal { get; set; }
+    [YamlIgnore]
+    private bool HasSplxDal { get { return SplxDal != null; } }
 
     public PrincipalList Users { get; set; }
     [YamlIgnore]
@@ -40,9 +43,9 @@ public class SuplexProvider : IAuthorizationProvider
     [YamlIgnore]
     internal DateTime ListSourceLastWriteTime { get; set; } = DateTime.MinValue;
 
-    public string LdapRoot { get; set; }
-    [YamlIgnore]
-    internal bool HasLdapRoot { get { return !string.IsNullOrWhiteSpace( LdapRoot ); } }
+    //public string LdapRoot { get; set; }
+    //[YamlIgnore]
+    //internal bool HasLdapRoot { get { return !string.IsNullOrWhiteSpace( LdapRoot ); } }
 
     private bool HasContent { get { return HasUsers || HasGroups; } }
 
@@ -98,16 +101,20 @@ public class SuplexProvider : IAuthorizationProvider
                 }
             }
 
-            Dal = new SuplexDal( Splx );
+            if( HasSuplexConnection )
+            {
+                SplxDal = new SuplexDal( SuplexConnection );
+                _cache[hash] = this;
+            }
         }
     }
 
     private void Configure(SuplexProvider p, DateTime? listSourceLastWriteTime = null)
     {
-        Splx = p.Splx;
+        SuplexConnection = p.SuplexConnection;
         Users = p.Users;
         Groups = p.Groups;
-        LdapRoot = p.LdapRoot;
+        //LdapRoot = p.LdapRoot;
         ListSourcePath = p.ListSourcePath;
         ListSourceLastWriteTime = listSourceLastWriteTime ?? p.ListSourceLastWriteTime;
     }
@@ -150,8 +157,8 @@ public class SuplexProvider : IAuthorizationProvider
         AuthorizationType result = AuthorizationType.None;
 
         List<string> groupMembership = null;
-        if( HasGroups && HasLdapRoot )
-            groupMembership = Dal.GetGroupMembership( id );
+        if( HasGroups && HasSplxDal )
+            groupMembership = SplxDal.GetGroupMembership( id );
         bool haveGroupMembership = groupMembership != null && groupMembership.Count > 0;
 
         //process Denies

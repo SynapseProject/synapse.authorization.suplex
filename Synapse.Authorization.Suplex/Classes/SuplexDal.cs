@@ -28,7 +28,7 @@ namespace Synapse.Authorization.Suplex
             if( _connectionInfo.HasPath && File.Exists( _connectionInfo.Path ) )
             {
                 DateTime lastWriteTime = File.GetLastWriteTimeUtc( _connectionInfo.Path );
-                if( !lastWriteTime.Equals( _connectionInfo.PathLastWriteTime ) )
+                if( _splxStore == null || !lastWriteTime.Equals( _connectionInfo.PathLastWriteTime ) )
                 {
                     _splxStore = _splxApi.LoadFile( _connectionInfo.Path );
                     _connectionInfo.PathLastWriteTime = lastWriteTime;
@@ -44,11 +44,22 @@ namespace Synapse.Authorization.Suplex
 
         public List<string> GetGroupMembership(string id)
         {
+            List<string> list = null;
+
             if( LoadFileChecked() )
             {
+                User user = _splxStore.Users.GetByName( id );
+                if( user != null )
+                {
+                    IEnumerable<GroupMembershipItem> membership = _splxStore.GroupMembership.GetByMember( user, false );
+
+                    list = new List<string>();
+                    foreach( GroupMembershipItem g in membership )
+                        list.Add( g.Group.Name );
+                }
             }
 
-            return null;
+            return list;
         }
     }
 }
