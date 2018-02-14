@@ -2,11 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using Synapse.Authorization;
-using Synapse.Authorization.Suplex;
 using Synapse.Core.Utilities;
 using Synapse.Services;
 
@@ -16,12 +13,9 @@ public class SuplexProvider : IAuthorizationProvider
 {
     static Dictionary<int, SuplexProvider> _cache = new Dictionary<int, SuplexProvider>();
 
-    public SuplexConnectionInfo SuplexConnection { get; set; }
+    public SuplexConnection Connection { get; set; }
     [YamlIgnore]
-    public bool HasSuplexConnection { get { return SuplexConnection != null && SuplexConnection.HasPath; } }
-    private SuplexDal SplxDal { get; set; }
-    [YamlIgnore]
-    private bool HasSplxDal { get { return SplxDal != null; } }
+    public bool HasConnection { get { return Connection != null && Connection.HasPath; } }
 
     public PrincipalList Users { get; set; }
     [YamlIgnore]
@@ -42,10 +36,6 @@ public class SuplexProvider : IAuthorizationProvider
     public string ListSourcePath { get; set; }
     [YamlIgnore]
     internal DateTime ListSourceLastWriteTime { get; set; } = DateTime.MinValue;
-
-    //public string LdapRoot { get; set; }
-    //[YamlIgnore]
-    //internal bool HasLdapRoot { get { return !string.IsNullOrWhiteSpace( LdapRoot ); } }
 
     private bool HasContent { get { return HasUsers || HasGroups; } }
 
@@ -101,9 +91,9 @@ public class SuplexProvider : IAuthorizationProvider
                 }
             }
 
-            if( HasSuplexConnection )
+            if( HasConnection )
             {
-                SplxDal = new SuplexDal( SuplexConnection );
+                Connection.InitializeChecked();
                 _cache[hash] = this;
             }
         }
@@ -111,10 +101,9 @@ public class SuplexProvider : IAuthorizationProvider
 
     private void Configure(SuplexProvider p, DateTime? listSourceLastWriteTime = null)
     {
-        SuplexConnection = p.SuplexConnection;
+        Connection = p.Connection;
         Users = p.Users;
         Groups = p.Groups;
-        //LdapRoot = p.LdapRoot;
         ListSourcePath = p.ListSourcePath;
         ListSourceLastWriteTime = listSourceLastWriteTime ?? p.ListSourceLastWriteTime;
     }
@@ -157,8 +146,8 @@ public class SuplexProvider : IAuthorizationProvider
         AuthorizationType result = AuthorizationType.None;
 
         List<string> groupMembership = null;
-        if( HasGroups && HasSplxDal )
-            groupMembership = SplxDal.GetGroupMembership( id );
+        if( HasGroups && HasConnection )
+            groupMembership = Connection.GetGroupMembership( id );
         bool haveGroupMembership = groupMembership != null && groupMembership.Count > 0;
 
         //process Denies

@@ -56,10 +56,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\SuplexDal.cs" />
     <Compile Include="SuplexProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Classes\SuplexConnectionInfo.cs" />
+    <Compile Include="Classes\SuplexConnection.cs" />
     <Compile Include="Classes\SuplexConnectionType.cs" />
   </ItemGroup>
   <ItemGroup>
