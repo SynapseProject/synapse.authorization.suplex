@@ -91,9 +91,9 @@ public class SuplexProvider : IAuthorizationProvider
                 }
             }
 
-            if( HasConnection )
+            if( HasConnection && Connection.WantsInitialize )
             {
-                Connection.InitializeChecked();
+                Connection.Initialize();
                 _cache[hash] = this;
             }
         }

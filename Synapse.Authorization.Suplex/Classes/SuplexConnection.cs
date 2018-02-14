@@ -19,13 +19,38 @@ public class SuplexConnection
     SuplexStore _splxStore = null;
 
 
-    public void InitializeChecked()
+    public bool WantsInitialize
+    {
+        get
+        {
+            switch( Type )
+            {
+                case SuplexConnectionType.File:
+                {
+                    if( HasPath && File.Exists( Path ) )
+                    {
+                        DateTime lastWriteTime = File.GetLastWriteTimeUtc( Path );
+                        return !lastWriteTime.Equals( PathLastWriteTime );
+                    }
+                    return false;
+                }
+                default:
+                {
+                    //nothing else suported yet, throw exception?
+                    return false;
+                }
+            }
+        }
+    }
+
+    public void Initialize()
     {
         switch( Type )
         {
             case SuplexConnectionType.File:
             {
-                LoadFileChecked();
+                _splxStore = _splxApi.LoadFile( Path );
+                PathLastWriteTime = File.GetLastWriteTimeUtc( Path );
                 break;
             }
             default:
@@ -36,40 +61,18 @@ public class SuplexConnection
         }
     }
 
-    bool LoadFileChecked()
-    {
-        bool ok = false;
-
-        if( HasPath && File.Exists( Path ) )
-        {
-            DateTime lastWriteTime = File.GetLastWriteTimeUtc( Path );
-            if( !lastWriteTime.Equals( PathLastWriteTime ) )
-            {
-                _splxStore = _splxApi.LoadFile( Path );
-                PathLastWriteTime = lastWriteTime;
-            }
-
-            ok = true;
-        }
-
-        return ok;
-    }
-
     public List<string> GetGroupMembership(string id)
     {
         List<string> list = null;
 
-        if( LoadFileChecked() )
+        User user = _splxStore.Users.GetByName( id );
+        if( user != null )
         {
-            User user = _splxStore.Users.GetByName( id );
-            if( user != null )
-            {
-                IEnumerable<GroupMembershipItem> membership = _splxStore.GroupMembership.GetByMember( user, false );
+            IEnumerable<GroupMembershipItem> membership = _splxStore.GroupMembership.GetByMember( user, false );
 
-                list = new List<string>();
-                foreach( GroupMembershipItem g in membership )
-                    list.Add( g.Group.Name );
-            }
+            list = new List<string>();
+            foreach( GroupMembershipItem g in membership )
+                list.Add( g.Group.Name );
         }
 
         return list;
