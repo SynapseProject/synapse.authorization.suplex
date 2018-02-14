@@ -5,6 +5,11 @@ VisualStudioVersion = 15.0.27130.2026
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Synapse.Authorization.Suplex", "Synapse.Authorization.Suplex\Synapse.Authorization.Suplex.csproj", "{FB5BCB39-EBE1-4EED-96E2-771FCAAE9093}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{21BC637E-0EF6-4F9B-8639-21D7891D2028}"
+	ProjectSection(SolutionItems) = preProject
+		scripts\AssemblyInfo.xml = scripts\AssemblyInfo.xml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
