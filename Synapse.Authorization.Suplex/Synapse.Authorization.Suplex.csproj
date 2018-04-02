@@ -37,11 +37,11 @@
     <Reference Include="Suplex.Core, Version=4.0.0.2, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Suplex.Core.4.0.0.2\lib\net40\Suplex.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Synapse.Authorization, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Synapse.Authorization.0.1.18043.0-rc2\lib\net45\Synapse.Authorization.dll</HintPath>
+    <Reference Include="Synapse.Authorization, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Synapse.Authorization.1.0.18048\lib\net45\Synapse.Authorization.dll</HintPath>
     </Reference>
-    <Reference Include="Synapse.Core, Version=0.1.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982, processorArchitecture=MSIL">
-      <HintPath>..\packages\Synapse.Core.Signed.0.1.18030.0-rc2\lib\net45\Synapse.Core.dll</HintPath>
+    <Reference Include="Synapse.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a6de1cc56b73f982, processorArchitecture=MSIL">
+      <HintPath>..\packages\Synapse.Core.Signed.1.0.18056\lib\net45\Synapse.Core.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
