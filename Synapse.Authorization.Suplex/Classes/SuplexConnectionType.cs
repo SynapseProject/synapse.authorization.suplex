@@ -1,7 +1,5 @@
-﻿public enum SuplexConnectionType
+﻿public enum SuplexDalConnectionType
 {
-    None,
     File,
-    SqlServer,
     RestApi
 }

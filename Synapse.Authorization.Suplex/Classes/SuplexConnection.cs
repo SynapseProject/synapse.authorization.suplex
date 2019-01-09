@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using Suplex.Forms.ObjectModel.Api;
+
+using Suplex.Security.DataAccess;
+using Suplex.Security.Principal;
+using Suplex.Security.WebApi;
 
 using YamlDotNet.Serialization;
 
 public class SuplexConnection
 {
-    public SuplexConnectionType Type { get; set; } = SuplexConnectionType.File;
+    public SuplexDalConnectionType Type { get; set; } = SuplexDalConnectionType.File;
 
     public string Path { get; set; }
     [YamlIgnore]
@@ -15,8 +18,7 @@ public class SuplexConnection
     [YamlIgnore]
     internal DateTime PathLastWriteTime { get; set; } = DateTime.MinValue;
 
-    SuplexApiClient _splxApi = new SuplexApiClient();
-    SuplexStore _splxStore = null;
+    ISuplexDal _dal = null;
 
 
     public bool WantsInitialize
@@ -25,7 +27,7 @@ public class SuplexConnection
         {
             switch( Type )
             {
-                case SuplexConnectionType.File:
+                case SuplexDalConnectionType.File:
                 {
                     if( HasPath && File.Exists( Path ) )
                     {
@@ -36,7 +38,6 @@ public class SuplexConnection
                 }
                 default:
                 {
-                    //nothing else suported yet, throw exception?
                     return false;
                 }
             }
@@ -47,15 +48,15 @@ public class SuplexConnection
     {
         switch( Type )
         {
-            case SuplexConnectionType.File:
+            case SuplexDalConnectionType.File:
             {
-                _splxStore = _splxApi.LoadFile( Path );
+                _dal = FileSystemDal.LoadFromYamlFile( Path );
                 PathLastWriteTime = File.GetLastWriteTimeUtc( Path );
                 break;
             }
-            default:
+            case SuplexDalConnectionType.RestApi:
             {
-                //nothing else suported yet, throw exception?
+                _dal = new SuplexSecurityHttpApiClient( Path );
                 break;
             }
         }
@@ -65,10 +66,10 @@ public class SuplexConnection
     {
         List<string> list = null;
 
-        User user = _splxStore.Users.GetByName( id );
-        if( user != null )
+        List<User> users = _dal.GetUserByName( id, exact: true );
+        if( users?.Count > 0 )
         {
-            IEnumerable<GroupMembershipItem> membership = _splxStore.GroupMembership.GetByMember( user, false );
+            IEnumerable<GroupMembershipItem> membership = _dal.GetGroupMemberOf( users[0].UId, false );
 
             list = new List<string>();
             foreach( GroupMembershipItem g in membership )
