@@ -15,7 +15,7 @@
 
   <ItemGroup>
     <PackageReference Include="Synapse.Core.Signed" Version="1.0.18350" />
-    <PackageReference Include="Synapse.Authorization" Version="1.0.18291" />
+    <PackageReference Include="Synapse.Authorization" Version="1.0.19010" />
     <PackageReference Include="Suplex.Security.Core" Version="1.0.18355" />
     <PackageReference Include="Suplex.Security.FileSystemDal" Version="1.0.19001" />
     <PackageReference Include="Suplex.Security.WebApi.HttpClient" Version="1.0.19001" />
