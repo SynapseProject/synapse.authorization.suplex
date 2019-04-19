@@ -3,8 +3,8 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
-    <FileVersion>1.0.19009.0</FileVersion>
-    <Version>1.0.19009.0</Version>
+    <FileVersion>1.0.19109.0</FileVersion>
+    <Version>1.0.19109.0</Version>
     <AssemblyName>Synapse.Authorization.Suplex</AssemblyName>
     <RootNamespace>Synapse.Authorization.Suplex</RootNamespace>
   </PropertyGroup>
@@ -14,12 +14,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Synapse.Core.Signed" Version="1.0.18350" />
+    <PackageReference Include="Synapse.Core.Signed" Version="1.0.19092" />
     <PackageReference Include="Synapse.Authorization" Version="1.0.19010" />
-    <PackageReference Include="Suplex.Security.Core" Version="1.0.18355" />
-    <PackageReference Include="Suplex.Security.FileSystemDal" Version="1.0.19001" />
-    <PackageReference Include="Suplex.Security.WebApi.HttpClient" Version="1.0.19001" />
-    <PackageReference Include="YamlDotNet.Signed" Version="5.2.1" />
+    <PackageReference Include="Suplex.Security.Core" Version="1.0.19075" />
+    <PackageReference Include="Suplex.Security.FileSystemDal" Version="1.0.19063" />
+    <PackageReference Include="Suplex.Security.WebApi.HttpClient" Version="1.0.19064" />
+    <PackageReference Include="YamlDotNet.Signed" Version="6.0.0" />
   </ItemGroup>
 
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
