@@ -17,9 +17,8 @@
     <PackageReference Include="Synapse.Core.Signed" Version="1.0.19092" />
     <PackageReference Include="Synapse.Authorization" Version="1.0.19010" />
     <PackageReference Include="Suplex.Security.Core" Version="1.0.19075" />
-    <PackageReference Include="Suplex.Security.FileSystemDal" Version="1.0.19063" />
+    <PackageReference Include="Suplex.Security.FileSystemDal" Version="1.0.19109" />
     <PackageReference Include="Suplex.Security.WebApi.HttpClient" Version="1.0.19064" />
-    <PackageReference Include="YamlDotNet.Signed" Version="6.0.0" />
   </ItemGroup>
 
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
